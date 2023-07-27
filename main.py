@@ -200,7 +200,5 @@ def get_info(links):
         
 
 
-get_info(get_urls(yelp_url))
-
-
+get_info(get_urls(yelp_url)[:50])
 
