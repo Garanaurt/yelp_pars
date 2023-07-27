@@ -11,5 +11,5 @@ Installation:
 
 
 
-  - Save extracted data into output.xls file in the project directory
+Save extracted data into output.xls file in the project directory
   
