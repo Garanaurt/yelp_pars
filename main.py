@@ -9,10 +9,12 @@ from urllib.parse import urlparse, parse_qs
 import time
 
 
+links = ['https://www.yelp.ca/adredir?ad_business_id=DiunBQRvOVnlSIpwrZoz-w&campaign_id=6aOufgu3tgKSHs-Kp42EMw&click_origin=search_results&placement=vertical_0&placement_slot=0&redirect_url=https%3A%2F%2Fwww.yelp.ca%2Fbiz%2Fsukoun-henna-vancouver&request_id=0c9fbef15d16051d&signature=5b740d2d49ba98a84b02915b32df02f93e5311874d4bcf75927f9bf7dcd23915&slot=0', 'https://www.yelp.ca/adredir?ad_business_id=zn9DaVqaeSUXC4SVPQu3Kw&campaign_id=NaKz-J9_UFrIPJNwqZ3lYQ&click_origin=search_results&placement=vertical_0&placement_slot=0&redirect_url=https%3A%2F%2Fwww.yelp.ca%2Fbiz%2Fwanitas-reel-hair-delta-2&request_id=0c9fbef15d16051d&signature=f3f490376117c4027f3941c832223d5c288b96fd2b4b9ae801c6c63b86823aae&slot=1', 'https://www.yelp.ca/biz/tranquility-organic-spa-vancouver?osq=Day+Spas', 'https://www.yelp.ca/biz/smile-thai-wellness-vancouver-3?osq=Day+Spas', 'https://www.yelp.ca/biz/h%C3%A4lsa-spa-vancouver?osq=Day+Spas', 'https://www.yelp.ca/biz/barefoot-oasis-foot-massage-and-spa-vancouver-2?osq=Day+Spas', 'https://www.yelp.ca/biz/willow-stream-spa-at-fairmont-pacific-rim-vancouver?osq=Day+Spas', 'https://www.yelp.ca/biz/miraj-hammam-spa-vancouver-2?osq=Day+Spas', 'https://www.yelp.ca/biz/sense-a-rosewood-spa-vancouver-2?osq=Day+Spas', 'https://www.yelp.ca/biz/sanatio-spa-vancouver-6?osq=Day+Spas', 'https://www.yelp.ca/biz/leelawadee-thai-spa-vancouver?osq=Day+Spas', 'https://www.yelp.ca/biz/art-of-sauna-and-spa-burnaby?osq=Day+Spas', 'https://www.yelp.ca/adredir?ad_business_id=9dPSeI51UI4qZu3wtNIduA&campaign_id=72ZGaM3wUn540xjXgJq7xQ&click_origin=search_results&placement=below_search&placement_slot=1&redirect_url=https%3A%2F%2Fwww.yelp.ca%2Fbiz%2Fbeyond-spa-richmond&request_id=0c9fbef15d16051d&signature=df18c2b3882b7ae749591bd35bbbba428f207f2b4c7f00236d829bef323c184f&slot=0']
+
 
 yelp_url = 'https://www.yelp.ca/search?find_desc=Day+Spas&find_loc=vancouver%2C+BC'
 
-ChromeDriverManager().install()
+#ChromeDriverManager().install()
 
 #driver get page source
 def get_page(link):
@@ -36,6 +38,7 @@ def get_urls(url, count=0, result=[]):
     next_btn = soup.select_one('.next-link.navigation-button__09f24__m9qRz.css-ahgoya')
     if next_btn:
         count += 10
+        print(result)
         return get_urls(url, count, result)
     else:
         return result
@@ -67,11 +70,16 @@ def get_biz_info_pages(link):
     try:
         button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.css-1p9ibgf a.css-19v1rkv')))
         button.click()
+        change_page = True
     except Exception:
+        change_page = False
+
+    if not change_page:
         try:
-            button1 = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.margin-t1-5__09f24__nx2jL.border-color--default__09f24__NPAKY')))
+            button1 = driver.find_element(By.CSS_SELECTOR, '.margin-t1-5__09f24__nx2jL.border-color--default__09f24__NPAKY button')
+            wait.until(EC.element_to_be_clickable(button1))
             button1.click()
-            time.sleep(1)  
+            wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '#yelp_main_body',)))
         except Exception:
             pass  
     biz_info2 = driver.page_source
@@ -200,5 +208,6 @@ def get_info(links):
         
 
 
-get_info(get_urls(yelp_url)[:50])
+#get_info(get_urls(yelp_url)[:50])
+get_info(links)
 
