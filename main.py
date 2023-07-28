@@ -39,7 +39,7 @@ def get_urls(url, count=0, result=[]):
     if next_btn:
         count += 10
         print(result)
-        return get_urls(url, count, result)
+        return get_urls(url, count, result[2:11])
     else:
         return result
 
