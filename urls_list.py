@@ -1,10 +1,17 @@
 from selenium import webdriver
 from bs4 import BeautifulSoup
 import time
+from selenium.webdriver.chrome.options import Options
 
 
 def get_page(link):
-    driver = webdriver.Chrome()
+    chrome_options = Options()
+    chrome_options.add_argument("--blink-settings=imagesEnabled=false")
+    chrome_options.add_argument("--window-size=800,600")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-gpu")
+    driver = webdriver.Chrome(options=chrome_options)
     driver.get(link)
     time.sleep(1)
     products = driver.page_source
@@ -24,7 +31,6 @@ def get_urls(url, count=0, result=[]):
     next_btn = soup.select_one('.next-link.navigation-button__09f24__m9qRz.css-ahgoya')
     if next_btn:
         count += 10
-        print(result)
         return get_urls(url, count, result[2:11])
     else:
         return result
