@@ -22,14 +22,12 @@ def run_worker(queue):
 
 
 def main():
-
-
     try:
         redis_conn = redis.Redis(host='localhost', port=6379)
         redis_conn.ping()
-        print("Redis сервер доступен.")
+        print("Redis server - ok")
     except redis.ConnectionError:
-        print("Не удалось подключиться к Redis серверу.")
+        print("No connection to Redis.")
 
 
     start_time = time.time()
@@ -48,15 +46,12 @@ def main():
 
     for process in processes:
         process.join()
-    
-
- 
 
     queue.empty()
 
     end_time = time.time()
     execution_time = end_time - start_time
-    print(f"Программа выполнена за: {execution_time} секунд")
+    print(f"parsng done: {execution_time}sec")
 
 
 main()
